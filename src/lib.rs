@@ -27,7 +27,16 @@ impl StrudelExtension {
             id,
             &LanguageServerInstallationStatus::CheckingForUpdate,
         );
-        let version = zed::npm_package_latest_version(PACKAGE_NAME)?;
+        let version = match zed::npm_package_latest_version(PACKAGE_NAME) {
+            Ok(v) => v,
+            Err(_) if exists => return Ok(SERVER_PATH.to_string()),
+            Err(err) => {
+                return Err(format!(
+                    "could not find {PACKAGE_NAME} on npm ({err}). For a local build, set \
+                     lsp.{PACKAGE_NAME}.settings.server_path to its dist/server.mjs"
+                ))
+            }
+        };
 
         if !exists || zed::npm_package_installed_version(PACKAGE_NAME)?.as_ref() != Some(&version) {
             zed::set_language_server_installation_status(
