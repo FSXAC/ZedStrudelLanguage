@@ -1,0 +1,11 @@
+# Strudel mini-notation, only used via injection into Strudel strings.
+name = "Strudel Mini"
+grammar = "strudel_mini"
+path_suffixes = []
+hidden = true
+brackets = [
+  { start = "[", end = "]", close = true, newline = false },
+  { start = "<", end = ">", close = true, newline = false },
+  { start = "{", end = "}", close = true, newline = false },
+  { start = "(", end = ")", close = true, newline = false },
+]

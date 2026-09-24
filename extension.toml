@@ -11,3 +11,11 @@ repository = "https://github.com/FSXAC/ZedStrudelLanguage"
 [grammars.javascript]
 repository = "https://github.com/tree-sitter/tree-sitter-javascript"
 rev = "44c892e0be055ac465d5eeddae6d3e194424e7de" # v0.25.0
+
+# Strudel mini-notation, injected into "..." and `...` strings.
+# For local development this points at the local checkout; switch to the
+# GitHub URL before publishing.
+[grammars.strudel_mini]
+repository = "file:///Users/muchenhe/Dev/ZedStrudelLanguage"
+rev = "cb4e071275a73066f739e80ba5e0204346166cb3"
+path = "tree-sitter-strudel-mini"

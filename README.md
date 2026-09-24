@@ -10,10 +10,14 @@ and adds Strudel-aware queries on top.
 ## Features
 
 - Registers the **Strudel** language for `*.strudel` and `*.str` files
-- Pattern labels (`$:`, `d1:`, `bass:`) highlighted as labels; muted
-  patterns (`_$:`, `_bass:`) highlighted as comments
-- Mini-notation strings (`"..."` and `` `...` ``) are highlighted differently
-  from plain JS strings (`'...'`), matching how Strudel parses them
+- Pattern labels (`$:`, `d1:`, `bass:`) highlighted bold (via
+  `@emphasis.strong`, falling back to `@label`); muted patterns (`_$:`,
+  `_bass:`) highlighted as comments
+- Full **mini-notation** highlighting inside `"..."` and `` `...` `` strings
+  (plain `'...'` strings are left alone, matching how Strudel parses them):
+  notes, sample/scale names, numbers, rests, operators (`* / @ ! ? : ..`),
+  and `[ ] < > { } ( )` groups, powered by a bundled tree-sitter grammar in
+  [`tree-sitter-strudel-mini/`](tree-sitter-strudel-mini)
 - Pattern constructors / globals (`s`, `sound`, `note`, `n`, `stack`, `cat`,
   `setcpm`, `samples`, …) highlighted as builtins
 - Continuous signals (`sine`, `saw`, `rand`, `perlin`, …) highlighted as
@@ -36,6 +40,11 @@ fetches `wasi-sdk` automatically the first time). After editing queries, click
 **Rebuild** on the extension in the Extensions page. Use `zed: open log` or
 launch with `zed --foreground` to debug load errors.
 
+To tweak label styling, override `emphasis.strong` (or `label`) in your
+settings via `theme_overrides`, e.g.
+`{ "theme_overrides": { "One Dark": { "syntax": { "emphasis.strong": { "color": "#e06c75", "font_weight": 800 } } } } }`
+(note this also affects bold Markdown text).
+
 To open files with other extensions as Strudel, add to your Zed settings:
 
 ```json
@@ -50,8 +59,25 @@ languages/strudel/
   config.toml                # language metadata (suffixes, comments, brackets)
   highlights.scm             # syntax highlighting
   brackets.scm indents.scm outline.scm overrides.scm
+  injections.scm             # injects mini-notation into "..." / `...` strings
+languages/strudel-mini/      # hidden "Strudel Mini" language (injection target)
+tree-sitter-strudel-mini/    # mini-notation grammar (grammar.js + generated src/)
 test/                        # sample Strudel files for manual testing
 ```
+
+### Working on the mini-notation grammar
+
+Edit `tree-sitter-strudel-mini/grammar.js`, then (with the
+[tree-sitter CLI](https://github.com/tree-sitter/tree-sitter/releases)):
+
+```sh
+cd tree-sitter-strudel-mini
+tree-sitter generate --js-runtime native   # regenerates src/
+tree-sitter test                           # runs test/corpus/*.txt
+```
+
+Commit the result, set `rev` under `[grammars.strudel_mini]` in
+`extension.toml` to that commit, and rebuild the dev extension in Zed.
 
 ## Publishing
 
@@ -60,6 +86,9 @@ In short:
 
 1. Push this repo publicly to GitHub (the `repository` field in
    `extension.toml` must match) and make sure `LICENSE` is present (MIT).
+   Change `[grammars.strudel_mini] repository` from the local `file://` URL to
+   `https://github.com/FSXAC/ZedStrudelLanguage`; its `rev` must be a pushed
+   commit.
 2. Fork [`zed-industries/extensions`](https://github.com/zed-industries/extensions)
    (to a personal account) and clone it with submodules.
 3. Add this repo as a submodule and register it:

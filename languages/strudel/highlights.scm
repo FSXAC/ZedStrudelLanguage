@@ -89,13 +89,15 @@
 ; ---------------------------------------------------------------------------
 
 ; Pattern labels: `$:`, `d1:`, `bass:`, `$lead:`
+; `@emphasis.strong` renders bold in most themes; falls back to `@label`.
 (labeled_statement
-  label: (statement_identifier) @label
-  ":" @label)
+  label: (statement_identifier) @label @emphasis.strong
+  ":" @label @emphasis.strong)
 
 ; Muted patterns: `_$:`, `_bass:`
 (labeled_statement
   label: (statement_identifier) @comment
+  ":" @comment.muted
   (#match? @comment "^_"))
 
 ; Pattern constructors, globals and helpers
