@@ -1,0 +1,6 @@
+setcpm(120/4)
+
+$: s("bd [sd hh")
+  .gain(0.5)
+
+$: note("c4 e4*<2 3 g4").s("piano")

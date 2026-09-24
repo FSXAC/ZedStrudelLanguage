@@ -1,7 +1,7 @@
 id = "strudel"
 name = "Strudel"
-description = "Syntax highlighting for Strudel, the JavaScript live-coding music environment (strudel.cc)."
-version = "0.1.0"
+description = "Strudel (strudel.cc) support: syntax + mini-notation highlighting and live error checking."
+version = "0.2.0"
 schema_version = 1
 authors = ["Muchen He <i@muchen.ca>"]
 repository = "https://github.com/FSXAC/ZedStrudelLanguage"
@@ -19,3 +19,8 @@ rev = "44c892e0be055ac465d5eeddae6d3e194424e7de" # v0.25.0
 repository = "file:///Users/muchenhe/Dev/ZedStrudelLanguage"
 rev = "cb4e071275a73066f739e80ba5e0204346166cb3"
 path = "tree-sitter-strudel-mini"
+
+# Diagnostics-only language server (strudel-language-server/, published to npm).
+[language_servers.strudel-language-server]
+name = "Strudel Language Server"
+languages = ["Strudel"]

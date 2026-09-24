@@ -1,0 +1,1 @@
+$: n("0 2 4").scale("C4:minorr").s("piano")

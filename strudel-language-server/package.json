@@ -1,0 +1,49 @@
+{
+  "name": "strudel-language-server",
+  "version": "0.1.0",
+  "description": "Language server and linter for Strudel (strudel.cc): reports JavaScript, mini-notation and runtime errors without opening the browser.",
+  "type": "module",
+  "bin": {
+    "strudel-language-server": "dist/server.mjs",
+    "strudel-lint": "dist/cli.mjs"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "gen-browser-api": "node scripts/gen-browser-api.mjs",
+    "test": "node scripts/build.mjs && node --test test/*.test.mjs"
+  },
+  "keywords": [
+    "strudel",
+    "language-server",
+    "lsp",
+    "linter",
+    "livecoding",
+    "zed"
+  ],
+  "author": "Muchen He <i@muchen.ca>",
+  "license": "AGPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FSXAC/ZedStrudelLanguage.git",
+    "directory": "strudel-language-server"
+  },
+  "engines": {
+    "node": ">=22.15"
+  },
+  "devDependencies": {
+    "@strudel/core": "^1.2.6",
+    "@strudel/mini": "^1.2.6",
+    "@strudel/tonal": "^1.2.6",
+    "@strudel/transpiler": "^1.2.6",
+    "acorn": "^8.18.0",
+    "acorn-walk": "^8.3.5",
+    "esbuild": "^0.28.2",
+    "vscode-languageserver": "^10.1.1",
+    "vscode-languageserver-textdocument": "^1.0.14"
+  }
+}

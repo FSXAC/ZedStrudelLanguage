@@ -1,0 +1,39 @@
+setcpm(125/4)
+
+b1: note(`<
+  [b2 b3 e4 g4]
+  [b2 b3 e4 f#4]
+  [b2 b3 d4 f#4]
+  [a2 a3 d4 e4]
+  [g2 g3 c4 d4]
+  [g2 g3 c4 e4]
+  [g2 g3 d4 e4]
+  [a2 a3 d4 e4]
+>*2`).s("gm_lead_8_bass_lead")
+.clip(4).decay(0.5)
+.room(0.7).roomsize(2.5)
+.lpf(slider(576, 0, 2400))
+.lpq(slider(2.68, 0, 20))
+.echo(3, 0.3, 0.3)
+._pianoroll()
+d1: s("bd * 4").bank("tr909")
+.hpf(80).lpf(2400)
+._scope()
+
+d2: s("< - - - - - - - <[sd [sd sd*2, - hh]] [- sd*2, - hh*2]>>*2").bank("tr909")
+.room(0.4).lpf(8000)
+.gain("1.0 <0.8 0.4>")
+
+d3: s("[- sd] * 2, [bd -] * 2").bank("tr909")
+.gain(0.5)
+.hpf(100).lpf(3000)
+.room(0.2)
+
+b2: note("<[E1*8 [E1*4 D1*4]] [C1*8 [C1*4 D1*4]]>/2").s("gm_synth_bass_2")
+.lpf(800)
+.decay(0.7)
+._scope()
+// _s1: note("<G5@ [A5 D5] E5, G4@ [A4 D4] E4>").sound("piano")
+// ._pianoroll()
+
+$: n("0 2 4").scale("C4:minor").piano()._punchcard()

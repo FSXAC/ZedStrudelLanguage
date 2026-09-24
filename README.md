@@ -1,6 +1,6 @@
 # Strudel for Zed
 
-Syntax highlighting for [Strudel](https://strudel.cc) — the JavaScript live-coding
+Syntax highlighting and live error checking for [Strudel](https://strudel.cc) — the JavaScript live-coding
 music environment — in the [Zed](https://zed.dev) editor.
 
 Strudel code is JavaScript, so this extension reuses
@@ -24,10 +24,35 @@ and adds Strudel-aware queries on top.
   builtin constants
 - Visual methods (`._pianoroll()`, `._scope()`, `._punchcard()`, …)
   highlighted specially
+- **Live error checking** via the bundled
+  [`strudel-language-server`](strudel-language-server): JavaScript syntax,
+  mini-notation syntax (e.g. `Unclosed '['`), and runtime errors such as
+  `.gian is not a function` or bad scale names are shown inline, so you know
+  the code will run on strudel.cc before pasting it there
 - Outline panel lists every pattern block and top-level variable
 - Bracket matching, auto-closing, auto-indent and `cmd-/` comment toggling
 
 ## Install locally (dev extension)
+
+Prerequisites: [rustup](https://rustup.rs) (Zed compiles the extension's Rust
+code to WASM), and a local build of the language server until it is published
+to npm:
+
+```sh
+cd strudel-language-server && npm install && npm run build
+```
+
+and point Zed at it in `settings.json`:
+
+```json
+"lsp": {
+  "strudel-language-server": {
+    "binary": { "path": "/path/to/ZedStrudelLanguage/strudel-language-server/dist/server.mjs" }
+  }
+}
+```
+
+(`.js`/`.mjs` paths run on Zed's bundled Node, so Node doesn't need to be installed.)
 
 1. Open Zed, run `zed: install dev extension` from the command palette
    (`cmd-shift-p`), or click **Install Dev Extension** on the Extensions page
@@ -39,6 +64,15 @@ Zed downloads the grammar at the pinned `rev` and compiles it to WASM (it
 fetches `wasi-sdk` automatically the first time). After editing queries, click
 **Rebuild** on the extension in the Extensions page. Use `zed: open log` or
 launch with `zed --foreground` to debug load errors.
+
+### Linter settings
+
+Runtime checking evaluates your code in a sandboxed Node process (no audio, no file writes, no network APIs). To only
+check syntax:
+
+```json
+"lsp": { "strudel-language-server": { "settings": { "evaluate": false } } }
+```
 
 To tweak label styling, override `emphasis.strong` (or `label`) in your
 settings via `theme_overrides`, e.g.
@@ -62,6 +96,8 @@ languages/strudel/
   injections.scm             # injects mini-notation into "..." / `...` strings
 languages/strudel-mini/      # hidden "Strudel Mini" language (injection target)
 tree-sitter-strudel-mini/    # mini-notation grammar (grammar.js + generated src/)
+strudel-language-server/     # Node LSP + CLI linter (AGPL-3.0, published to npm)
+src/lib.rs, Cargo.toml       # extension code: installs/launches the language server
 test/                        # sample Strudel files for manual testing
 ```
 
@@ -84,14 +120,17 @@ Commit the result, set `rev` under `[grammars.strudel_mini]` in
 See Zed's [publishing guide](https://zed.dev/docs/extensions/publishing/overview).
 In short:
 
-1. Push this repo publicly to GitHub (the `repository` field in
+1. Publish the language server to npm (`cd strudel-language-server && npm
+   run build && npm publish`); the extension installs it from npm with
+   `zed::npm_install_package`.
+2. Push this repo publicly to GitHub (the `repository` field in
    `extension.toml` must match) and make sure `LICENSE` is present (MIT).
    Change `[grammars.strudel_mini] repository` from the local `file://` URL to
    `https://github.com/FSXAC/ZedStrudelLanguage`; its `rev` must be a pushed
    commit.
-2. Fork [`zed-industries/extensions`](https://github.com/zed-industries/extensions)
+3. Fork [`zed-industries/extensions`](https://github.com/zed-industries/extensions)
    (to a personal account) and clone it with submodules.
-3. Add this repo as a submodule and register it:
+4. Add this repo as a submodule and register it:
 
    ```sh
    git submodule add https://github.com/FSXAC/ZedStrudelLanguage.git extensions/strudel
@@ -101,10 +140,10 @@ In short:
    # extensions.toml
    [strudel]
    submodule = "extensions/strudel"
-   version = "0.1.0"
+   version = "0.2.0"
    ```
 
-4. Run `pnpm sort-extensions`, commit, and open a PR (one extension per PR).
+5. Run `pnpm sort-extensions`, commit, and open a PR (one extension per PR).
 
 To ship updates: bump `version` in `extension.toml`, push, then open a PR to
 `zed-industries/extensions` that bumps the submodule commit and the `version`
@@ -112,4 +151,7 @@ in `extensions.toml`.
 
 ## License
 
-MIT
+The extension (queries, grammar, Rust code) is MIT. The language server in
+`strudel-language-server/` is AGPL-3.0-or-later because it bundles Strudel's
+packages; it is downloaded from npm at runtime, not compiled into the
+extension.
