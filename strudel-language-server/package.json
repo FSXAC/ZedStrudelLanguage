@@ -14,6 +14,7 @@
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
+    "prepublishOnly": "node scripts/build.mjs",
     "gen-browser-api": "node scripts/gen-browser-api.mjs",
     "test": "node scripts/build.mjs && node --test test/*.test.mjs"
   },
