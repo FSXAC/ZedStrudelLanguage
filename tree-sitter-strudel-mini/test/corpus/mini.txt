@@ -1,0 +1,202 @@
+========================================
+Sequence and rests
+========================================
+
+bd ~ sd - hh _ oh
+
+---
+
+(source
+  (word)
+  (rest)
+  (word)
+  (rest)
+  (word)
+  (elongation)
+  (word))
+
+========================================
+Notes and numbers
+========================================
+
+c4 eb3 f#2 Bb1 0 -3 1.5 .25
+
+---
+
+(source
+  (note)
+  (note)
+  (note)
+  (note)
+  (number)
+  (number)
+  (number)
+  (number))
+
+========================================
+Groups
+========================================
+
+<[bd sd]*2 {a b c}%4 [bd, hh hh]>
+
+---
+
+(source
+  (alternation
+    (subsequence
+      (word)
+      (word))
+    (modifier
+      (number))
+    (polymeter
+      (note)
+      (note)
+      (note))
+    (modifier
+      (number))
+    (subsequence
+      (word)
+      (stack_separator)
+      (word)
+      (word))))
+
+========================================
+Modifiers
+========================================
+
+bd*4 sd/2 hh!3 cp@3 oh? rim?0.3 bd! bd*<2 3> sd*[2 3]
+
+---
+
+(source
+  (word)
+  (modifier
+    (number))
+  (word)
+  (modifier
+    (number))
+  (word)
+  (modifier
+    (number))
+  (word)
+  (modifier
+    (number))
+  (word)
+  (modifier)
+  (word)
+  (modifier
+    (number))
+  (word)
+  (modifier)
+  (word)
+  (modifier
+    (alternation
+      (number)
+      (number)))
+  (word)
+  (modifier
+    (subsequence
+      (number)
+      (number))))
+
+========================================
+Sample index and scales
+========================================
+
+bd:3 C4:minor 2:0.5
+
+---
+
+(source
+  (word)
+  (modifier
+    (number))
+  (note)
+  (modifier
+    (word))
+  (number)
+  (modifier
+    (number)))
+
+========================================
+Euclid
+========================================
+
+bd(3,8,2) hh(<3 5>,8)
+
+---
+
+(source
+  (word)
+  (euclid
+    (number)
+    (stack_separator)
+    (number)
+    (stack_separator)
+    (number))
+  (word)
+  (euclid
+    (alternation
+      (number)
+      (number))
+    (stack_separator)
+    (number)))
+
+========================================
+Random choice, range, groups
+========================================
+
+bd | sd | hh 0 .. 7 bd sd . hh hh hh
+
+---
+
+(source
+  (word)
+  (choice_separator)
+  (word)
+  (choice_separator)
+  (word)
+  (number)
+  (range)
+  (number)
+  (word)
+  (word)
+  (group_separator)
+  (word)
+  (word)
+  (word))
+
+========================================
+Chords
+========================================
+
+<C^7 Am9 Bb^9 Dm7>
+
+---
+
+(source
+  (alternation
+    (word)
+    (word)
+    (word)
+    (word)))
+
+========================================
+Spaced operators
+========================================
+
+[-  0* 2] rim * 4 _ rim
+
+---
+
+(source
+  (subsequence
+    (rest)
+    (number)
+    (modifier
+      (number)))
+  (word)
+  (modifier
+    (number))
+  (elongation)
+  (word))
