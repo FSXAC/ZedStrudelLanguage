@@ -1,0 +1,53 @@
+// Big room / festival EDM, 128bpm, A minor. Hands in the air, zero shame
+// flip `drop` to 0 for the build, 1 for the drop
+setcpm(128/4)
+
+const drop = 1
+
+kick: s("bd*4").bank("RolandTR909")
+  .gain(drop ? 1 : 0)
+  .duck("2:3").duckattack(0.15).duckdepth(0.8)
+  ._scope()
+
+clap: s("- cp - cp").bank("RolandTR909")
+  .room(0.4).gain(0.6)
+
+hats: s("[- oh]*4").bank("RolandTR909").gain(drop ? 0.4 : 0)
+
+// snare roll for the build, speeds up over 4 cycles
+roll: s("<sd*4 sd*8 sd*16 [sd*16 sd*32]>").bank("RolandTR909")
+  .gain(drop ? 0 : saw.range(0.1, 0.6).slow(4))
+
+riser: s("white")
+  .hpf(saw.range(300, 9000).slow(4))
+  .gain(drop ? 0 : saw.range(0, 0.15).slow(4))
+
+chords: chord("<Am F C G>")
+  .voicing()
+  .struct("[- x]*4")
+  .s("supersaw")
+  .lpf(drop ? 4000 : saw.range(400, 3000).slow(4))
+  .room(0.4)
+  .gain(0.35)
+  .orbit(2)
+
+lead: n(`<
+  [0 2 4 [7 4] - 4 2 [4 -]]
+  [0 2 4 [7 9] - 7 4 [5 -]]
+  [2 4 7 [9 7] - 4 2 [0 -]]
+  [-1 0 2 [4 2] - 1 -1 [0 -]]
+>`).scale("A4:minor")
+  .s("supersaw")
+  .lpf(5000).lpenv(2)
+  .delay(0.3).delaytime(3/16)
+  .room(0.5)
+  .gain(drop ? 0.4 : 0)
+  .orbit(2)
+  ._pianoroll()
+
+bass: note("<a1 f1 c2 g1>")
+  .struct("[- x]*4")
+  .s("supersaw")
+  .lpf(500)
+  .gain(0.6)
+  .orbit(3)

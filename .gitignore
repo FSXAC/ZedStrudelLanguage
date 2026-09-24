@@ -1,0 +1,5 @@
+# Build artifacts produced by Zed when installing as a dev extension
+grammars/
+extension.wasm
+target/
+.DS_Store

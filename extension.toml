@@ -1,0 +1,13 @@
+id = "strudel"
+name = "Strudel"
+description = "Syntax highlighting for Strudel, the JavaScript live-coding music environment (strudel.cc)."
+version = "0.1.0"
+schema_version = 1
+authors = ["Muchen He <i@muchen.ca>"]
+repository = "https://github.com/FSXAC/ZedStrudelLanguage"
+
+# Strudel code is plain JavaScript, so we reuse the JavaScript grammar and
+# layer Strudel-specific queries on top of it.
+[grammars.javascript]
+repository = "https://github.com/tree-sitter/tree-sitter-javascript"
+rev = "44c892e0be055ac465d5eeddae6d3e194424e7de" # v0.25.0
