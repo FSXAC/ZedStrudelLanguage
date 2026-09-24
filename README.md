@@ -47,12 +47,14 @@ and point Zed at it in `settings.json`:
 ```json
 "lsp": {
   "strudel-language-server": {
-    "binary": { "path": "/path/to/ZedStrudelLanguage/strudel-language-server/dist/server.mjs" }
+    "settings": { "server_path": "/path/to/ZedStrudelLanguage/strudel-language-server/dist/server.mjs" }
   }
 }
 ```
 
-(`.js`/`.mjs` paths run on Zed's bundled Node, so Node doesn't need to be installed.)
+(The script runs on Zed's bundled Node, so Node doesn't need to be installed. Don't
+use `binary.path` for this: Zed executes that file directly, which needs a system
+`node` on `PATH`.)
 
 1. Open Zed, run `zed: install dev extension` from the command palette
    (`cmd-shift-p`), or click **Install Dev Extension** on the Extensions page

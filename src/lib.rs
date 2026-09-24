@@ -60,26 +60,19 @@ impl zed::Extension for StrudelExtension {
         id: &LanguageServerId,
         worktree: &zed::Worktree,
     ) -> Result<zed::Command> {
-        // Allow a custom server via settings, e.g. for local development:
-        // "lsp": { "strudel-language-server": { "binary": { "path": "/path/to/dist/server.mjs" } } }
-        let binary = LspSettings::for_worktree(id.as_ref(), worktree)
+        // Zed applies `lsp.<id>.binary` overrides itself, so a local server
+        // script is configured via settings and run on Zed's bundled Node:
+        // "lsp": { "strudel-language-server": { "settings": { "server_path": "/path/to/dist/server.mjs" } } }
+        let local = LspSettings::for_worktree(id.as_ref(), worktree)
             .ok()
-            .and_then(|s| s.binary);
-        if let Some(path) = binary.as_ref().and_then(|b| b.path.clone()) {
-            let mut args = binary
-                .as_ref()
-                .and_then(|b| b.arguments.clone())
-                .unwrap_or_else(|| vec!["--stdio".into()]);
-            let env = binary
-                .and_then(|b| b.env)
-                .map(|e| e.into_iter().collect())
-                .unwrap_or_default();
-            // Scripts run on Zed's bundled Node.
-            if path.ends_with(".js") || path.ends_with(".mjs") {
-                args.insert(0, path);
-                return Ok(zed::Command { command: zed::node_binary_path()?, args, env });
-            }
-            return Ok(zed::Command { command: path, args, env });
+            .and_then(|s| s.settings)
+            .and_then(|s| s.get("server_path")?.as_str().map(String::from));
+        if let Some(path) = local {
+            return Ok(zed::Command {
+                command: zed::node_binary_path()?,
+                args: vec![path, "--stdio".into()],
+                env: Default::default(),
+            });
         }
 
         let script = self.server_script_path(id)?;
