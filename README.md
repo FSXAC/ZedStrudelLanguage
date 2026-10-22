@@ -59,7 +59,7 @@ use `binary.path` for this: Zed executes that file directly, which needs a syste
 1. Open Zed, run `zed: install dev extension` from the command palette
    (`cmd-shift-p`), or click **Install Dev Extension** on the Extensions page
    (`cmd-shift-x`).
-2. Select this directory.
+2. Select the directory where you cloned this repo (e.g. `~/Code/ZedStrudelLanguage`, **not** `~/Code/ZedStrudelLanguage/strudel-language-server`)
 3. Open any `.strudel` file (e.g. [`test/festival-edm.strudel`](test/festival-edm.strudel)).
 
 Zed downloads the grammar at the pinned `rev` and compiles it to WASM (it
